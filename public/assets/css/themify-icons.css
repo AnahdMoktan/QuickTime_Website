@@ -13,7 +13,7 @@
 
 [class^="ti-"], [class*=" ti-"] {
 	font-family: 'themify';
-	speak: none;
+	speak-as: none;
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
@@ -143,7 +143,7 @@
 	content: "\e626";
 }
 .ti-arrow-up:before {
-	content: "\e627";
+	content: "\f106";
 }
 .ti-arrow-right:before {
 	content: "\e628";

@@ -12,8 +12,12 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
+        "intervention/image": "^2.5",
+        "jfcherng/php-mb-string": "^1.4",
+        "klarna/php-xmlrpc": "^5.0",
         "laravel/framework": "^7.0",
-        "laravel/tinker": "^2.0"
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "2.4"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

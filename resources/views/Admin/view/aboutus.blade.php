@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Admin Panel</title>
+    @include('Admin.parts.metacss')
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
+    <style>
+        .form-control {
+            line-height: 1 !important;
+        }
+
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+
+        @include('Admin.parts.topnav')
+
+        @include('Admin.parts.sidenav')
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                       
+                        <div class="col-sm-6">
+                            <h1 class="m-0 text-dark">About Us</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">About Us</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                     @if (session('success'))
+                          <div class="alert alert-success " id="success_alert" role="alert">
+                             {{session('success')}}
+                          </div>
+                        @endif
+                         @if (session('update'))
+                            <div class="alert alert-info" role="alert" id="update_alert">
+                             {{session('update')}}
+                            </div>
+                        @endif
+                         @if (session('delete'))                  
+                              <div class="alert alert-danger " id="success_danger" role="alert">
+                                  {{ session('delete')}}
+                              </div>
+                            @endif
+
+                            @if($errors->any())
+                              <div class="alert alert-danger" role="alert" id="errors-alert" >
+                                  <ul>
+                                      @foreach($errors->all() as $error)
+                                      <li>
+                                          {{$error}}
+                                      </li>
+                                      @endforeach
+                                  </ul>
+                              </div>
+                            @endif
+                    <div class="input-group mb-3" style="margin-top: 30px;">
+                      <form method="POST" action="{{ url('aboutus') }}"
+                      enctype="multipart/form-data">
+                      @csrf
+                        <div class="form-group">
+                            <label class="" for="inputGroupSelect01">Title:</label>
+                        <select class="form-group" name="title" id="inputGroupSelect01" style="width: 300px;">
+                            <option value="About Us" selected>About Us</option>
+                            <option value="Our Mission">Our Mission</option>
+                            <option value="Customer Satisfaction">Customer Satisfaction</option>
+                            <option value="Our History">Our History</option>
+
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Description</label>
+                    <textarea name="description" class="form-control ckeditor"></textarea>
+                    </div>
+                    
+
+                    <label for="">Image:</label>
+                    <input type="file" class="form-control" name="image">
+                    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                  </form>
+                    <hr style="padding-bottom: 40px;">
+                    <h2 style="text-align: center;">Contents Here</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Action</th>
+                        </thead>
+                        <tbody>
+                            @foreach($aboutus as $i=>$au)
+                                <tr>
+                                    <td>
+                                        {{ $i++ }}
+                                    </td>
+                                    <td>
+                                        {{ $au['title'] }}
+                                    </td>
+                                    <td>
+                                      {!! substr($au['description'],0,180) !!}
+                                    </td>
+
+                                    <td>
+                                        <img height="80" width="80"
+                                            src="{{ url(implode('storage',explode('public',$au['image']))) }}">
+                                    </td>
+                                    <td>
+                                        <a href="#editaboutus{{ $au->id }}" data-toggle="modal">
+                                            <i class="fas fa-edit">Edit</i>
+                                        </a>
+                                        &nbsp;
+                                        <a
+                                            href="{{ url('aboutus/delete',array($au->id)) }}">
+                                            <i class="fas fa-trash">Delete</i>
+                                        </a>
+
+                                    </td>
+                                    <td style="float:left">
+
+                                        <div class="modal" tabindex="-1" id="editaboutus{{ $au->id }}">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Edit Here</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form method="POST"
+                                                            action="{{ url('aboutus/update',array($au->id)) }}"
+                                                            enctype="multipart/form-data" id="uploadForm">
+                                                            {{ csrf_field() }}
+                                                            <div class="form-group">
+                                                                <label class="" for="inputGroupSelect01">Title:</label>
+                                                            <select class="form-group" name="title" id="inputGroupSelect01" style="width: 300px;">
+                                                                <option value="About Us" selected>About Us</option>
+                                                                <option value="Our Mission">Our Mission</option>
+                                                                <option value="Customer Satisfaction">Customer Satisfaction</option>
+                                                                <option value="Our History">Our History</option>
+                                    
+                                                            </select>
+                                                            
+
+                                                            <div class="form-group">
+                                                                <label for="">Description</label>
+                                                            <textarea name="description" class="form-control ckeditor">{{$au['description']}}</textarea>
+                                                            </div>
+
+                                                            {{-- <div id="editor1"></div> --}}
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="">Image</label>
+                                                                <input type="file" class="form-control" name="image"
+                                                                    id="file">
+                                                                <img height="80" width="80" style="padding-top:10px;"
+                                                                    src="{{ url(implode('storage',explode('public',$au['image']))) }}">
+                                                            </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+
+                                                        <button type="submit" class="btn btn-primary">
+                                                            Update</button>
+                                                    </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </form>
+                </div>
+                </td>
+                </tr>
+                @endforeach
+
+                </tbody>
+                </table>
+
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+
+
+
+        @include('Admin.parts.footer')
+        </footer>
+        @include('Admin.parts.metajs')
+</body>
+
+</html>
